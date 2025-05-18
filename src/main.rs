@@ -99,7 +99,8 @@ fn main() {
         println!("2) Show tasks by priority");
         println!("3) View next task");
         println!("4) Complete next task");
-        println!("5) Exit");
+        println!("5) Search tasks by tag");
+        println!("6) Exit");
         print!("Select an option: ");
         io::stdout().flush().unwrap();
 
@@ -160,8 +161,27 @@ fn main() {
                     println!("No tasks to complete.");
                 }
             }
-            "5" => break,
-            _ => println!("Invalid option."),
+            "5" => {
+                // Prompt for tag to search
+                print!("Enter tag: ");
+                io::stdout().flush().unwrap();
+                let mut tag = String::new();
+                io::stdin().read_line(&mut tag).unwrap();
+                let tag = tag.trim();
+
+                // Search and display matching tasks
+                let results = manager.tasks_by_tag(tag);
+                if results.is_empty() {
+                    println!("No tasks found for tag '{}'.", tag);
+                } else {
+                    println!("Tasks with tag '{}':", tag);
+                    for task in results {
+                        println!("{:?}", task);
+                    }
+                }
+            }
+            "6" => break,
+            _   => println!("Invalid option."),            
         }
     }
 }
